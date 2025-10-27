@@ -3,22 +3,29 @@ version: 0.2
 phases:
   install:
     commands:
-      - echo "Dependencies to install"
-      - sudo yum -y update
-      - sudo yum install nginx -y
-  pre_build:
-    commands:
-      - echo "Preparing static site package"
+      - echo "Installing Nginx..."
+      - yum update -y
+      - yum install -y nginx
   build:
     commands:
-      - echo Starting on `date`
-      # - cp index.html /var/www/html
-      - cp -R -- * /var/www/html || true
-pre_build:
-    commands:
-      - echo configuring Nginx
+      - echo "Copying site files to Nginx directory..."
+      - rm -rf /usr/share/nginx/html/*
+      - cp -R * /usr/share/nginx/html/
+      - echo "Starting Nginx..."
+      - nginx -g 'daemon off;' &
+      - echo "Nginx started and serving static files"
+
 artifacts:
   files:
-      - /var/www/html/index.html
-  base-directory: build_output
+    - '**/*'
   discard-paths: no
+
+
+
+
+
+
+  # files:
+  #     - /var/www/html/index.html
+  # base-directory: build_output
+  # discard-paths: no
