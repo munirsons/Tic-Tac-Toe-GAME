@@ -1,0 +1,24 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo "Dependencies to install"
+      - sudo apt-get update -y
+      - sudo apt-get install nginx -y
+  pre_build:
+    commands:
+      - echo "Preparing static site package"
+  build:
+    commands:
+      - echo Starting on `date`
+      # - cp index.html /var/www/html
+      - cp -R -- * /var/www/html || true
+pre_build:
+    commands:
+      - echo configuring Nginx
+artifacts:
+  files:
+      - /var/www/html/index.html
+  base-directory: build_output
+  discard-paths: no
